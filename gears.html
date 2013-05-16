@@ -176,32 +176,32 @@
 				var speedMix = -speedBig*57/12;
 				var speedOthers = speedBig*57/20;
 
-				var angleBig = (Date.now() - start) * speedBig;
-				var angleMix = (Date.now() - start) * speedMix;
-				var angleOthers = (Date.now() - start) * speedOthers;
-
 
 				d3.select("#XMLID_1_").attr("transform",  function(d) {
-					return "rotate(" + angleBig + "," + x_center + "," + y_center + ")";
+					return "rotate(" + speedToAngle(speedBig) + "," + x_center + "," + y_center + ")";
 				});
 
 				d3.select("#XMLID_2_").attr("transform",  function(d) {
-					return "rotate(" + angleMix + "," + x_center + "," + y_center + ")";
+					return "rotate(" + speedToAngle(speedMix) + "," + x_center + "," + y_center + ")";
 				});
 
 				d3.select("#XMLID_3_").attr("transform",  function(d) {
-					return "rotate(" + angleOthers +"," + x_other1 + "," + y_other1 + ")";
+					return "rotate(" + speedToAngle(speedOthers) +"," + x_other1 + "," + y_other1 + ")";
 				});
 
 				d3.select("#XMLID_4_").attr("transform",  function(d) {
-					return "rotate(" + angleOthers + "," + x_other2 + "," + y_other2 + ")";
+					return "rotate(" + speedToAngle(speedOthers) + "," + x_other2 + "," + y_other2 + ")";
 				});
 
 				d3.select("#XMLID_5_").attr("transform",  function(d) {
-					return "rotate(" + angleOthers + "," + x_other3 + "," + y_other3 + ")";
+					return "rotate(" + speedToAngle(speedOthers) + "," + x_other3 + "," + y_other3 + ")";
 				});
 
 			});
+
+			function speedToAngle(speed){
+				return ( (Date.now() - start) * speed)%360; // modulo 360
+			}
 
 		</script>
 	</body>
