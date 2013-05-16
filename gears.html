@@ -129,65 +129,73 @@
 		<script type="text/javascript" src="d3.min.js"></script>
 		<script type="text/javascript">
 
+			// change if you like:
 			var settings = {
 				speed: 0.02,
 				scale: 1.5,
 				center: {
-					x: 375,
-					y: 140
+					x: 700,
+					y: 385
 				}
 			}
 
-			var start = Date.now();
+			// create d3.js references for reuse:
+			var gears = {
+				all: d3.select("#allgears"),
+				big: d3.select("#biggear"),
+				mix: d3.select("#mixgear"),
+				other1: d3.select("#othergear1"),
+				other2: d3.select("#othergear2"),
+				other3: d3.select("#othergear3")
+			}
 
+			// calculate centers of all gears:
+			var centers = {};
+			for( var gear in gears ){
+				centers[gear] = getCenter( gears[gear] );
+			}
 
-			var x_center = 320;
-			var y_center = 240;
+			function getCenter(gear){
+				return {
+					x: gear.node().getBBox().width/2 + gear.node().getBBox().x,
+					y: gear.node().getBBox().height/2 + gear.node().getBBox().y
+				}
+			}
 
-			var x_other1 = x_center-66.44;
-			var y_other1 = y_center-115.09;
+			// position and scale all gears:
+			gears.all
+				.attr("transform", "translate(" + (settings.center.x - centers.all.x) + "," + (settings.center.y - centers.all.y) + ")scale("+settings.scale+")");
 
-			var x_other2 = x_center+132.89;
-			var y_other2 = y_center;
-
-			var x_other3 = x_center-66.44;
-			var y_other3 = y_center+115.09;
-
-
-			d3.select("#allgears")
-				.attr("transform", "translate(" + (settings.center.x) + "," + (settings.center.y) + ")scale("+settings.scale+")"); // in't midden zetten
-
-
+			// animation:
 			d3.timer(function() {
 				var speedBig = -settings.speed;
 				var speedMix = -speedBig*57/12;
 				var speedOthers = speedBig*57/20;
 
-
-				d3.select("#biggear").attr("transform",  function(d) {
-					return "rotate(" + speedToAngle(speedBig) + "," + x_center + "," + y_center + ")";
+				gears.big.attr("transform",  function(d) {
+					return "rotate(" + speedToAngle(speedBig) + "," + centers.big.x + "," + centers.big.y + ")";
 				});
 
-				d3.select("#mixgear").attr("transform",  function(d) {
-					return "rotate(" + speedToAngle(speedMix) + "," + x_center + "," + y_center + ")";
+				gears.mix.attr("transform",  function(d) {
+					return "rotate(" + speedToAngle(speedMix) + "," + centers.mix.x + "," + centers.mix.y + ")";
 				});
 
-				d3.select("#othergear1").attr("transform",  function(d) {
-					return "rotate(" + speedToAngle(speedOthers) +"," + x_other1 + "," + y_other1 + ")";
+				gears.other1.attr("transform",  function(d) {
+					return "rotate(" + speedToAngle(speedOthers) +"," + centers.other1.x + "," + centers.other1.y + ")";
 				});
 
-				d3.select("#othergear2").attr("transform",  function(d) {
-					return "rotate(" + speedToAngle(speedOthers) + "," + x_other2 + "," + y_other2 + ")";
+				gears.other2.attr("transform",  function(d) {
+					return "rotate(" + speedToAngle(speedOthers) + "," + centers.other2.x + "," + centers.other2.y + ")";
 				});
 
-				d3.select("#othergear3").attr("transform",  function(d) {
-					return "rotate(" + speedToAngle(speedOthers) + "," + x_other3 + "," + y_other3 + ")";
+				gears.other3.attr("transform",  function(d) {
+					return "rotate(" + speedToAngle(speedOthers) + "," + centers.other3.x + "," + centers.other3.y + ")";
 				});
-
 			});
 
+			var start = Date.now();
 			function speedToAngle(speed){
-				return ( (Date.now() - start) * speed)%360; // modulo 360
+				return ( (Date.now() - start) * speed)%360; // mod 360 to make sure the browsers doesn't crash on high angle values
 			}
 
 		</script>
