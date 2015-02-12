@@ -8,6 +8,10 @@
 				background-image: url('background-14-14.png');
 				background-repeat: no-repeat;
 			}
+
+			#allgears > g {
+				opacity: 0;
+			}
 		</style>
 	</head>
 	<body>
@@ -184,6 +188,33 @@
 			function speedToAngle(speed){
 				return ( (Date.now() - start) * speed)%360; // mod 360 to make sure the browsers doesn't crash on high angle values
 			}
+
+
+			document.addEventListener('keydown', function(event) {
+				showNext();
+			});
+
+			var c = 0;
+			function showNext(){
+				var order = [gears.mix, gears.other1, gears.other2, gears.other3, gears.big];
+
+				if(c > order.length-1)
+					return;
+
+				var nextgear = order[c];
+				c++;
+				show(nextgear);
+			}
+
+
+			function show(gear){
+				gear
+				.transition()
+					.duration(400)
+					.style("opacity", 1);
+			}
+
+
 
 		</script>
 	</body>
